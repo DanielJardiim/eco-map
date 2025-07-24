@@ -1,6 +1,11 @@
-# Node
+# Node (para o backend NestJS)
 node_modules/
 dist/
+
+# React (para o frontend)
+build/
+
+# Arquivos de ambiente
 .env
 
 # Docker
@@ -9,3 +14,8 @@ docker-data/
 
 # Editor
 .vscode/
+
+# Outros
+*.DS_Store
+*.tmp
+*.log
