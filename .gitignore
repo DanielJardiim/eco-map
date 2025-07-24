@@ -1,0 +1,11 @@
+# Node
+node_modules/
+dist/
+.env
+
+# Docker
+*.log
+docker-data/
+
+# Editor
+.vscode/
