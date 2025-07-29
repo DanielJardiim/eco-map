@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:18-bullseye
 
 WORKDIR /app
 
@@ -9,4 +9,4 @@ COPY . .
 
 RUN npm run build
 
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main"]
