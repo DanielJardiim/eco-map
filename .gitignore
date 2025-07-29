@@ -1,6 +1,7 @@
 # Node (para o backend NestJS)
 node_modules/
 dist/
+*.tsbuildinfo
 
 # React (para o frontend)
 build/
