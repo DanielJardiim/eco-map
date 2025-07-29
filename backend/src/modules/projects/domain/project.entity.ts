@@ -31,6 +31,6 @@ export class Project {
   geometry: Geometry;
 
   @ApiProperty()
-  @Column()
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt!: Date;
 }
