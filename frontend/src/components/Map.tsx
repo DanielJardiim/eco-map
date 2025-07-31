@@ -18,7 +18,8 @@ export default function Map({ projects }: MapProps) {
     <MapContainer
       center={[0, 0]}
       zoom={2}
-      style={{ height: "100vh", width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
+      scrollWheelZoom
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -26,52 +27,52 @@ export default function Map({ projects }: MapProps) {
       />
 
       {projects.map((project) => {
-        const { geometry } = project;
+        const { id, name, geometry } = project;
 
-        if (!geometry || !geometry.type || !geometry.coordinates) {
-          return null; // segurança extra
+        switch (geometry.type) {
+          case "Point": {
+            const [lng, lat] = geometry.coordinates as [number, number];
+            return (
+              <Marker key={id} position={[lat, lng]}>
+                <Popup>{name}</Popup>
+              </Marker>
+            );
+          }
+
+          case "Polygon": {
+            const coords = geometry.coordinates;
+
+            if (
+              Array.isArray(coords) &&
+              Array.isArray(coords[0]) &&
+              Array.isArray(coords[0][0])
+            ) {
+              const polygon: LatLngExpression[] = coords[0].map(
+                ([lng, lat]: [number, number]) => [lat, lng]
+              );
+
+              return (
+                <Polygon key={id} positions={polygon}>
+                  <Popup>{name}</Popup>
+                </Polygon>
+              );
+            }
+
+            return null;
+          }
+
+          case "Circle": {
+            const [lng, lat] = geometry.coordinates as [number, number];
+            return (
+              <Circle key={id} center={[lat, lng]} radius={1000} color="blue">
+                <Popup>{name}</Popup>
+              </Circle>
+            );
+          }
+
+          default:
+            return null;
         }
-
-        if (geometry.type === "Point") {
-          const [lng, lat] = geometry.coordinates as [number, number];
-          return (
-            <Marker key={project.id} position={[lat, lng]}>
-              <Popup>{project.name}</Popup>
-            </Marker>
-          );
-        }
-
-        if (geometry.type === "Polygon") {
-          const rawCoords = geometry.coordinates as any;
-
-          const polygonCoords = Array.isArray(rawCoords[0])
-            ? rawCoords[0].map(
-                ([lng, lat]: [number, number]) => [lat, lng] as LatLngExpression
-              )
-            : [];
-
-          return (
-            <Polygon key={project.id} positions={polygonCoords}>
-              <Popup>{project.name}</Popup>
-            </Polygon>
-          );
-        }
-
-        if (geometry.type === "Circle") {
-          const [lng, lat] = geometry.coordinates as [number, number];
-          return (
-            <Circle
-              key={project.id}
-              center={[lat, lng]}
-              radius={1000}
-              color="blue"
-            >
-              <Popup>{project.name}</Popup>
-            </Circle>
-          );
-        }
-
-        return null;
       })}
     </MapContainer>
   );
