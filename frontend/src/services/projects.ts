@@ -25,3 +25,10 @@ export const fetchProjectsByName = async (name: string): Promise<Project[]> => {
   });
   return response.data;
 };
+
+export const createProject = async (
+  project: Omit<Project, "id" | "createdAt">
+): Promise<Project> => {
+  const response = await api.post("/projects", project);
+  return response.data;
+};
