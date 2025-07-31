@@ -1,22 +1,24 @@
-import { useProjects } from "../../hooks/useProjects";
+import React from "react";
+import type { Project } from "../../services/projects";
+import styles from "./ProjectsList.module.css";
 
-export const ProjectsList: React.FC = () => {
-  const { data, error, isLoading } = useProjects();
+interface ProjectsListProps {
+  projects: Project[];
+}
 
-  if (isLoading) return <p>Loading projects...</p>;
-  if (error) return <p>Error loading projects</p>;
-
+export const ProjectsList: React.FC<ProjectsListProps> = ({ projects }) => {
   return (
-    <div>
-      <h1>Projects</h1>
-      <ul>
-        {data?.map((project) => (
-          <li key={project.id}>
-            <strong>{project.name}</strong> - {project.status} -{" "}
-            {project.responsibleResearcher}
-          </li>
-        ))}
-      </ul>
+    <div className={styles.listContainer}>
+      <h2 className={styles.title}>Projetos</h2>
+      {projects.map((project) => (
+        <div key={project.id} className={styles.projectItem}>
+          <div className={styles.projectName}>{project.name}</div>
+          <div className={styles.projectInfo}>Status: {project.status}</div>
+          <div className={styles.projectInfo}>
+            Responsável: {project.responsibleResearcher}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
