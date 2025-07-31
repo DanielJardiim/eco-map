@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createProject } from "../../services/projects";
 import styles from "./ProjectFormModal.module.css";
+import { GeometryDrawer } from "../../components/GeometryDrawer";
 
 interface Props {
   onClose: () => void;
@@ -21,7 +22,7 @@ export const ProjectFormModal: React.FC<Props> = ({ onClose, onCreated }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const parsedCoordinates = JSON.parse(coordinates); // Espera string tipo: [[-46.6, -23.5]]
+    const parsedCoordinates = JSON.parse(coordinates);
 
     await createProject({
       name,
@@ -75,11 +76,28 @@ export const ProjectFormModal: React.FC<Props> = ({ onClose, onCreated }) => {
             <option value="Circle">Circle</option>
           </select>
 
-          <textarea
-            value={coordinates}
-            onChange={(e) => setCoordinates(e.target.value)}
-            placeholder="Coordenadas JSON. Ex: [[-46.6, -23.5]]"
-            required
+          {geometryType && (
+            <p>
+              <strong>Tipo:</strong> {geometryType}
+            </p>
+          )}
+
+          <div className={styles.geometryBox}>
+            <label>Geometria selecionada:</label>
+            {coordinates ? (
+              <pre className={styles.geometryOutput}>{coordinates}</pre>
+            ) : (
+              <p style={{ fontStyle: "italic", color: "#888" }}>
+                Nenhuma geometria definida. Desenhe no mapa abaixo.
+              </p>
+            )}
+          </div>
+
+          <GeometryDrawer
+            onDraw={(type, coords) => {
+              setGeometryType(type as any);
+              setCoordinates(JSON.stringify(coords, null, 2));
+            }}
           />
 
           <div className={styles.actions}>
