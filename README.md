@@ -114,6 +114,16 @@ Exemplo de payload:
 
 ---
 
+## 📚 Documentação via Swagger
+
+Você pode acessar a documentação interativa da API via Swagger em:
+
+```bash
+http://localhost:3000/api
+```
+
+---
+
 ## 🔍 Funcionalidade de Busca
 
 No frontend, os usuários podem buscar por **nome do projeto** utilizando a barra de pesquisa localizada acima da lista lateral.
